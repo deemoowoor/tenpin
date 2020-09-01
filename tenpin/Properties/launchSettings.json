@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "tenpin": {
+      "commandName": "Project",
+      "commandLineArgs": "./scores.csv"
+    }
+  }
+}
