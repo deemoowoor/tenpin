@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace tenpin
@@ -14,11 +15,11 @@ namespace tenpin
 
         public int Score { get; private set; }
 
-        public bool IsLast { get { return Index == 10 && Rolls.Count > 2; } }
+        public bool IsLast => Index == 10 && Rolls.Count > 2;
 
-        public bool IsStrike { get { return Rolls.Count > 0 && Rolls[0] == Spare; } }
+        public bool IsStrike => Rolls.Count > 0 && Rolls[0] == Spare;
 
-        public bool IsSpare { get { return Rolls.Count > 1 && Rolls.Sum() == Spare; } }
+        public bool IsSpare => Rolls.Count > 1 && Rolls.Sum() == Spare;
 
         public static Frame Null = new Frame();
 
@@ -33,8 +34,16 @@ namespace tenpin
         {
             Previous = previous;
             Rolls = new List<int>();
-            Score = previous.Score;
+            Score = 0;
             Index = index;
+        }
+
+        private void AddSpareScore(int score)
+        {
+            if (!IsStrike && !IsSpare) 
+                throw new Exception("Should not be called for anything but spares or strikes");
+
+            Score += score;
         }
 
         public bool Roll(int roll)
@@ -53,16 +62,40 @@ namespace tenpin
             {
                 if (Previous.IsSpare && Rolls.Count == 1)
                 {
-                    Score += roll;
+                    Previous.AddSpareScore(roll);
                 }
                 else if (Previous.IsStrike)
                 {
-                    Score += roll;
+                    Previous.AddSpareScore(roll);
                 }
             }
 
             return (!IsStrike && !IsLast && Rolls.Count < 2);
         }
 
+        public override string ToString()
+        {
+            if (IsStrike && !IsLast)
+            {
+                return "X";
+            }
+
+            if (IsSpare && !IsLast)
+            {
+                return string.Format("{0}, /", Rolls[0]);
+            }
+
+            if (IsLast && IsStrike)
+            {
+                if (Rolls[1] == Spare)
+                {
+                    return string.Format("X, X");
+                }
+
+                return string.Format("X, {0}, {1}", Rolls[1], Rolls[2]);
+            }
+
+            return string.Format("{0}, {1}", Rolls[0], Rolls[1]);
+        }
     }
 }

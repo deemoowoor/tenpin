@@ -32,7 +32,7 @@ namespace tenpin
 
         public int GetTotalScore()
         {
-            return Frames.Last().Score;
+            return Frames.Sum(frame => frame.Score);
         }
     }
 }

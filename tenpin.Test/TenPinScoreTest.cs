@@ -17,10 +17,10 @@ namespace tenpin.Test
             Assert.Equal(10, computer.Frames.Count());
 
             Assert.Equal(2, computer.Frames[0].Score);
-            Assert.Equal(4, computer.Frames[1].Score);
-            Assert.Equal(6, computer.Frames[2].Score);
-            Assert.Equal(8, computer.Frames[3].Score);
-            Assert.Equal(10, computer.Frames[4].Score);
+            Assert.Equal(2, computer.Frames[1].Score);
+            Assert.Equal(2, computer.Frames[2].Score);
+            Assert.Equal(2, computer.Frames[3].Score);
+            Assert.Equal(2, computer.Frames[4].Score);
         }
 
         [Fact]
@@ -33,8 +33,8 @@ namespace tenpin.Test
             Assert.Equal(3, computer.Frames.Count());
             
             Assert.Equal(2, computer.Frames[0].Score);
-            Assert.Equal(4, computer.Frames[1].Score);
-            Assert.Equal(4, computer.Frames[2].Score);
+            Assert.Equal(2, computer.Frames[1].Score);
+            Assert.Equal(0, computer.Frames[2].Score);
             Assert.Equal(rolls.Sum(), computer.GetTotalScore());
         }
 
@@ -60,8 +60,8 @@ namespace tenpin.Test
             Assert.Equal(3, computer.Frames.Count());
 
             Assert.Equal(10, computer.Frames[0].Score);
-            Assert.Equal(10, computer.Frames[1].Score);
-            Assert.Equal(10, computer.Frames[2].Score);
+            Assert.Equal(0, computer.Frames[1].Score);
+            Assert.Equal(0, computer.Frames[2].Score);
             Assert.Equal(10, computer.GetTotalScore());
         }
 
@@ -73,9 +73,9 @@ namespace tenpin.Test
             var computer = new TenpinScoreTotal(rolls.ToArray());
 
             Assert.Equal(3, computer.Frames.Count());
-            Assert.Equal(10, computer.Frames[0].Score);
-            Assert.Equal(13, computer.Frames[1].Score);
-            Assert.Equal(13, computer.Frames[2].Score);
+            Assert.Equal(11, computer.Frames[0].Score);
+            Assert.Equal(2, computer.Frames[1].Score);
+            Assert.Equal(0, computer.Frames[2].Score);
 
             Assert.Equal(13, computer.GetTotalScore());
 
@@ -89,8 +89,8 @@ namespace tenpin.Test
             var computer = new TenpinScoreTotal(rolls.ToArray());
 
             Assert.Equal(10, computer.Frames[0].Score);
-            Assert.Equal(10, computer.Frames[1].Score);
-            Assert.Equal(10, computer.Frames[2].Score);
+            Assert.Equal(0, computer.Frames[1].Score);
+            Assert.Equal(0, computer.Frames[2].Score);
             Assert.Equal(10, computer.GetTotalScore());
         }
 
@@ -101,9 +101,9 @@ namespace tenpin.Test
 
             var computer = new TenpinScoreTotal(rolls.ToArray());
 
-            Assert.Equal(10, computer.Frames[0].Score);
-            Assert.Equal(14, computer.Frames[1].Score);
-            Assert.Equal(14, computer.Frames[2].Score);
+            Assert.Equal(12, computer.Frames[0].Score);
+            Assert.Equal(2, computer.Frames[1].Score);
+            Assert.Equal(0, computer.Frames[2].Score);
             Assert.Equal(14, computer.GetTotalScore());
         }
 
@@ -114,7 +114,7 @@ namespace tenpin.Test
 
             var computer = new TenpinScoreTotal(rolls.ToArray());
 
-            var expectedScores = new List<int> { 5, 14, 24, 33, 38, 44, 50, 60, 80, 90 };
+            var expectedScores = new List<int> { 5, 9, 12, 7, 5, 6, 6, 20, 15, 5 };
 
             Assert.Equal(expectedScores[0], computer.Frames[0].Score);
             Assert.Equal(expectedScores[1], computer.Frames[1].Score);
@@ -137,7 +137,7 @@ namespace tenpin.Test
 
             var computer = new TenpinScoreTotal(rolls.ToArray());
 
-            var expectedScores = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 10, 30 };
+            var expectedScores = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 20, 10 };
 
             Assert.Equal(expectedScores[0], computer.Frames[0].Score);
             Assert.Equal(expectedScores[1], computer.Frames[1].Score);
