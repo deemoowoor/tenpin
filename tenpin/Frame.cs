@@ -5,8 +5,8 @@ namespace tenpin
 {
     public class Frame
     {
-        public const int SPARE = 10;
-        public const int MISS = 0;
+        public const int Spare = 10;
+        public Frame Previous { get; }
 
         public int Index { get; }
 
@@ -14,7 +14,11 @@ namespace tenpin
 
         public int Score { get; private set; }
 
-        public Frame Previous { get; }
+        public bool IsLast { get { return Index == 10 && Rolls.Count > 2; } }
+
+        public bool IsStrike { get { return Rolls.Count > 0 && Rolls[0] == Spare; } }
+
+        public bool IsSpare { get { return Rolls.Count > 1 && Rolls.Sum() == Spare; } }
 
         public static Frame Null = new Frame();
 
@@ -37,32 +41,28 @@ namespace tenpin
         {
             Rolls.Add(roll);
 
-            if (IsStrike() || IsSpare())
-            {
-                if (IsLast() && Rolls.Count() < 3)
-                    return true;
-
-                return false;
-            }
-
             Score += roll;
 
-            return (!IsLast() && Rolls.Count < 2);
+            if (IsStrike || IsSpare)
+            {
+                if (IsLast && Rolls.Count() == 3)
+                    return false;
+            }
+
+            if (Previous != null && Previous != Null)
+            {
+                if (Previous.IsSpare && Rolls.Count == 1)
+                {
+                    Score += roll;
+                }
+                else if (Previous.IsStrike)
+                {
+                    Score += roll;
+                }
+            }
+
+            return (!IsStrike && !IsLast && Rolls.Count < 2);
         }
 
-        public bool IsLast()
-        {
-            return Index == 9 && Rolls.Count > 2;
-        }
-
-        public bool IsStrike()
-        {
-            return Rolls.Count > 0 && Rolls[0] == SPARE;
-        }
-
-        public bool IsSpare()
-        {
-            return Rolls.Count > 1 && Rolls.Sum() == SPARE;
-        }
     }
 }

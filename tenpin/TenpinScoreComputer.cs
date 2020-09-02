@@ -7,34 +7,32 @@ namespace tenpin
     {
         public const int MaxRolls = 10;
 
-        private readonly List<Frame> _frames;
+        public List<Frame> Frames { get; }
 
-        public List<Frame> Frames { get { return _frames; } }
-
-        public TenpinScoreTotal(int[] rolls)
+        public TenpinScoreTotal(IEnumerable<int> rolls)
         {
-            _frames = new List<Frame>();
+            Frames = new List<Frame>();
             FillFrames(rolls);
         }
 
-        private void FillFrames(int[] rolls)
+        private void FillFrames(IEnumerable<int> rolls)
         {
             var current = new Frame(Frame.Null, 1);
-            _frames.Add(current);
+            Frames.Add(current);
 
-            for (int i = 0; i < rolls.Count() && current.Index <= MaxRolls; i++)
+            foreach (var roll in rolls)
             {
-                if (!current.Roll(rolls[i]) && current.Index < MaxRolls)
+                if (!current.Roll(roll) && current.Index < MaxRolls)
                 {
                     current = new Frame(current, current.Index + 1);
-                    _frames.Add(current);
+                    Frames.Add(current);
                 }
             }
         }
 
         public int GetTotalScore()
         {
-            return _frames.Last().Score;
+            return Frames.Last().Score;
         }
     }
 }
