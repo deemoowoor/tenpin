@@ -152,5 +152,59 @@ namespace tenpin.Test
 
             Assert.Equal(30, computer.GetTotalScore());
         }
+
+        [Fact]
+        public void TestSeveralStrikesInARowShouldAccumulateBonuses()
+        {
+            var rolls = new List<int>() { 10, 10, 10, 0, 0 };
+            var computer = new TenpinScoreTotal(rolls.ToArray());
+
+            var expectedScores = new List<int> { 30, 20, 10 };
+
+            Assert.Equal(expectedScores[0], computer.Frames[0].Score);
+            Assert.Equal(expectedScores[1], computer.Frames[1].Score);
+            Assert.Equal(expectedScores[2], computer.Frames[2].Score);
+
+            Assert.Equal(60, computer.GetTotalScore());
+        }
+
+        [Fact]
+        public void TestSpareAndSeveralStrikesInARowShouldAccumulateBonuses()
+        {
+            var rolls = new List<int>() { 5, 5, 10, 10, 10, 0 };
+            var computer = new TenpinScoreTotal(rolls.ToArray());
+
+            var expectedScores = new List<int> { 20, 30, 20, 10 };
+
+            Assert.Equal(expectedScores[0], computer.Frames[0].Score);
+            Assert.Equal(expectedScores[1], computer.Frames[1].Score);
+            Assert.Equal(expectedScores[2], computer.Frames[2].Score);
+            Assert.Equal(expectedScores[3], computer.Frames[3].Score);
+
+            Assert.Equal(80, computer.GetTotalScore());
+        }
+
+        [Fact]
+        public void TestAllStrikesShouldHaveMaxScore()
+        {
+            var rolls = new List<int>() { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+            var computer = new TenpinScoreTotal(rolls.ToArray());
+
+            var expectedScores = new List<int> { 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 10 };
+
+            Assert.Equal(expectedScores[0], computer.Frames[0].Score);
+            Assert.Equal(expectedScores[1], computer.Frames[1].Score);
+            Assert.Equal(expectedScores[2], computer.Frames[2].Score);
+            Assert.Equal(expectedScores[3], computer.Frames[3].Score);
+            Assert.Equal(expectedScores[4], computer.Frames[4].Score);
+            Assert.Equal(expectedScores[5], computer.Frames[5].Score);
+            Assert.Equal(expectedScores[6], computer.Frames[6].Score);
+            Assert.Equal(expectedScores[7], computer.Frames[7].Score);
+            Assert.Equal(expectedScores[8], computer.Frames[8].Score);
+            Assert.Equal(expectedScores[9], computer.Frames[9].Score);
+
+            Assert.Equal(300, computer.GetTotalScore());
+        }
+
     }
 }

@@ -7,6 +7,13 @@ namespace tenpin
     public class Frame
     {
         public const int Spare = 10;
+
+        public const int MaxFrameIndex = 10;
+
+        public const int RollsPerFrame = 2;
+
+        public const int MaxRollsPerFrame = 3;
+
         public Frame Previous { get; }
 
         public int Index { get; }
@@ -15,13 +22,11 @@ namespace tenpin
 
         public int Score { get; private set; }
 
-        public bool IsLast => Index == 10 && Rolls.Count > 2;
+        public bool IsLast => Index == MaxFrameIndex && Rolls.Count >= RollsPerFrame;
 
         public bool IsStrike => Rolls.Count > 0 && Rolls[0] == Spare;
 
         public bool IsSpare => Rolls.Count > 1 && Rolls.Sum() == Spare;
-
-        public static Frame Null = new Frame();
 
         protected Frame()
         {
@@ -54,11 +59,11 @@ namespace tenpin
 
             if (IsStrike || IsSpare)
             {
-                if (IsLast && Rolls.Count() == 3)
+                if (IsLast && Rolls.Count() == MaxRollsPerFrame)
                     return false;
             }
 
-            if (Previous != null && Previous != Null)
+            if (Previous != null)
             {
                 if (Previous.IsSpare && Rolls.Count == 1)
                 {
@@ -68,9 +73,16 @@ namespace tenpin
                 {
                     Previous.AddSpareScore(roll);
                 }
+
+                var prePrevious = Previous.Previous;
+
+                if (!IsLast && prePrevious != null && prePrevious.IsStrike)
+                {
+                    prePrevious.AddSpareScore(roll);
+                }
             }
 
-            return (!IsStrike && !IsLast && Rolls.Count < 2);
+            return !IsStrike && !IsLast && Rolls.Count < 2;
         }
 
         public override string ToString()

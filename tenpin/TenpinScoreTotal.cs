@@ -17,7 +17,7 @@ namespace tenpin
 
         private void FillFrames(IEnumerable<int> rolls)
         {
-            var current = new Frame(Frame.Null, 1);
+            var current = new Frame(null, 1);
             Frames.Add(current);
 
             foreach (var roll in rolls)
